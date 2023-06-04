@@ -19,7 +19,7 @@ public class Response {
 
 	public static ResponseEntity<?> error(Object error) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("status", "success");
+		map.put("status", "error");
 		if (error != null)
 			map.put("data", error);
 		return ResponseEntity.ok(map);
