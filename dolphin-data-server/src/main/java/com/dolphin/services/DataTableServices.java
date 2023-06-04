@@ -20,5 +20,9 @@ public class DataTableServices {
 		return datas;
 			
 	}
+	
+	public void addData(DataTable data) {
+		dataTableDao.insertIntoSensorDataTable(0, data.getName_of_sensor(), data.getData());
+	}
 
 }

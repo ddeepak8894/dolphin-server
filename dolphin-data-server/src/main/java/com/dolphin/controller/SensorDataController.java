@@ -28,8 +28,8 @@ public class SensorDataController {
 	}
 	
 	@PostMapping("/writeSensorData")
-	public ResponseEntity<?> writeSensorData(@RequestBody SensorData sensorData ) {
-		
+	public ResponseEntity<?> writeSensorData(@RequestBody DataTable sensorData ) {
+		dataTableService.addData(sensorData);
 		return Response.error(sensorData);
 		
 	}
