@@ -1,69 +1,74 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
- 
+#include <ArduinoJson.h>
+
 const char* ssid = "DIGISOL";
 const char* password = "qas1725utl1";
- //Your Domain name with URL path or IP address with path
-String serverName = "http://192.168.1.34:4000/api/sensorDataStore/getSensorDetails";
-// the following variables are unsigned longs because the time, measured in
-// milliseconds, will quickly become a bigger number than can be stored in an int.
+const String serverName = "http://3.111.108.14:4000/api/sensorDataStore/writeSensorData";
+const int ledPin = 13;
+
+const unsigned long timerDelay = 15000; // 15 seconds
 unsigned long lastTime = 0;
-// Timer set to 10 minutes (600000)
-//unsigned long timerDelay = 600000;
-// Set timer to 5 seconds (5000)
-unsigned long timerDelay = 5000;
 
 void setup() {
-  Serial.begin(115200); 
-
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+  
   WiFi.begin(ssid, password);
-  Serial.println("Connecting");
-  while(WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
   }
-  Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
-  Serial.println(WiFi.localIP());
- 
-  Serial.println("Timer set to 5 seconds (timerDelay variable), it will take 5 seconds before publishing the first reading.");
+
+  Serial.println("Connected to WiFi");
 }
 
 void loop() {
-  // Send an HTTP POST request depending on timerDelay
-  if ((millis() - lastTime) > timerDelay) {
-    //Check WiFi connection status
-    if(WiFi.status()== WL_CONNECTED){
+  unsigned long currentTime = millis();
+
+  if (currentTime - lastTime >= timerDelay) {
+    if (WiFi.status() == WL_CONNECTED) {
       WiFiClient client;
       HTTPClient http;
 
-      
-      // Your Domain name with URL path or IP address with path
-      http.begin(client, serverName.c_str());
-  
-      // If you need Node-RED/server authentication, insert user and password below
-      //http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");
-        
-      // Send HTTP GET request
-      int httpResponseCode = http.GET();
-      
-      if (httpResponseCode>0) {
+      // Prepare JSON payload
+      const size_t bufferSize = JSON_OBJECT_SIZE(2);
+      DynamicJsonDocument jsonBuffer(bufferSize);
+      jsonBuffer["name_of_sensor"] = "krushna";
+      jsonBuffer["data"] = random(0, 10000); // Generate a random value between 0 and 10000
+
+      // Serialize JSON to a string
+      String payload;
+      serializeJson(jsonBuffer, payload);
+
+      // Make HTTP POST request
+      http.begin(client, serverName);
+      http.addHeader("Content-Type", "application/json");
+
+      int httpResponseCode = http.POST(payload);
+
+      if (httpResponseCode > 0) {
         Serial.print("HTTP Response code: ");
         Serial.println(httpResponseCode);
-        String payload = http.getString();
-        Serial.println(payload);
+        String response = http.getString();
+        Serial.println(response);
+        
+        // Blink the LED on pin 13 for visual indication
+        digitalWrite(ledPin, HIGH);
+        delay(500);
+        digitalWrite(ledPin, LOW);
       }
       else {
         Serial.print("Error code: ");
         Serial.println(httpResponseCode);
       }
-      // Free resources
+
       http.end();
     }
     else {
       Serial.println("WiFi Disconnected");
     }
-    lastTime = millis();
+
+    lastTime = currentTime;
   }
 }
