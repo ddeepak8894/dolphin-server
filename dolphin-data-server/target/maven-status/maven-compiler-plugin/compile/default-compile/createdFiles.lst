@@ -1,0 +1,8 @@
+com/dolphin/dtos/Response.class
+com/dolphin/services/DataTableServices.class
+com/dolphin/daos/IDataTableDao.class
+com/dolphin/DolphinDataServerApplication.class
+com/dolphin/entities/DataTable.class
+com/dolphin/dtos/SensorData.class
+com/dolphin/controller/SensorDataController.class
+META-INF/MANIFEST.MF

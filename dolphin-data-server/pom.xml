@@ -14,6 +14,7 @@
 	<name>dolphin-data-server</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+		<start-class>com.dolphin.DolphinDataServerApplication</start-class>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -46,6 +47,14 @@
 
 	<build>
 		<plugins>
+			    <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+            <mainClass>com.dolphin.DolphinDataServerApplication</mainClass>
+            <layout>JAR</layout>
+        </configuration>
+    </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
