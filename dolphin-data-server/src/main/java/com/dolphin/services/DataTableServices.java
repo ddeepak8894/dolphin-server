@@ -24,5 +24,9 @@ public class DataTableServices {
 	public void addData(DataTable data) {
 		dataTableDao.insertIntoSensorDataTable(0, data.getName_of_sensor(), data.getData());
 	}
+	
+	public void deleteAllData(DataTable data) {
+		dataTableDao.deleteAll();
+	}
 
 }
