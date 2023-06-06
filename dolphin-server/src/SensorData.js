@@ -6,7 +6,7 @@ const SensorData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/sensorDataStore/getSensorDetails');
+        const response = await fetch('http://3.111.108.14:4000/api/sensorDataStore/getSensorDetails');
         const json = await response.json();
         // Reverse the data array to display the latest sensor data at the top
         setData(json.data.reverse());

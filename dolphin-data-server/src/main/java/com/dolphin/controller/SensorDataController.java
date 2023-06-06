@@ -37,7 +37,7 @@ public class SensorDataController {
 	}
 	@GetMapping("/deleteAll")
 	public ResponseEntity<?> deleteAll() {
-		dataTableService.getAllData();
+		dataTableService.deleteAllData();
 		return  Response.success("data deleted success");
 	}
 

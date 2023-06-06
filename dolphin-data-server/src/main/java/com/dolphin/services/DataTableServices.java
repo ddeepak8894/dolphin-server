@@ -1,5 +1,6 @@
 package com.dolphin.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class DataTableServices {
 	}
 	
 	public void addData(DataTable data) {
-		dataTableDao.insertIntoSensorDataTable(0, data.getName_of_sensor(), data.getData());
+		dataTableDao.insertIntoSensorDataTable(0, data.getName_of_sensor(), data.getData(),new Date());
 	}
 	
-	public void deleteAllData(DataTable data) {
+	public void deleteAllData() {
 		dataTableDao.deleteAll();
 	}
 
