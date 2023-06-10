@@ -1,14 +1,16 @@
 import React from 'react';
-import SensorData from './SensorData';
+import TestChart from './components/TestChart';
 
 
-function App() {
+
+
+const App = () => {
   return (
-    <div className="App">
-      <SensorData />
+    <div>
+      <h1>Krushna</h1>
+      <TestChart/>
     </div>
   );
-}
+};
 
 export default App;
-
