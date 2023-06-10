@@ -7,7 +7,7 @@ const TestChart = () => {
   useEffect(() => {
     fetchData();
 
-    const interval = setInterval(fetchData, 2000);
+    const interval = setInterval(fetchData, 1000);
 
     return () => {
       clearInterval(interval);
@@ -26,14 +26,21 @@ const TestChart = () => {
   };
 
   const filterData = data => {
-    const tenMinutesAgo = Date.now() - 10 * 60 * 1000; // 10 minutes in milliseconds
+    const tenMinutesAgo = Date.now() - 2 * 60 * 1000; // 2 minutes in milliseconds
+    const dateFormatter = new Intl.DateTimeFormat('en', {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    });
+  
     return data
       .filter(item => new Date(item.sampleTakenAt).getTime() >= tenMinutesAgo)
       .map(item => ({
-        month: item.sampleTakenAt,
+        month: dateFormatter.format(new Date(item.sampleTakenAt)),
         value: item.data
       }));
   };
+  
 
   const handleClearData = async () => {
     try {
