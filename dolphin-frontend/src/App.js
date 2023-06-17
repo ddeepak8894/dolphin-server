@@ -1,16 +1,21 @@
 import React from 'react';
-import TestChart from './components/TestChart';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SignIn from './pages/sign_in/SignIn';
+import NavigateTest from './pages/testpages/TestNavigate';
+import { Container } from 'react-bootstrap';
 
+const App = () => (
+ 
+  <Container  >
+      <Router>
+    <Routes>
+      <Route path="/" element={<SignIn />} />
+      <Route path="/signIn" element={<NavigateTest />} />
 
+    </Routes>
+  </Router>
+  </Container>
 
-
-const App = () => {
-  return (
-    <div>
-      <h1>Krushna</h1>
-      <TestChart/>
-    </div>
-  );
-};
+);
 
 export default App;

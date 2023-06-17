@@ -69,7 +69,7 @@ const TestChart = () => {
       <h2>Test Chart</h2>
       <button onClick={handleClearData}>Clear All Data</button>
       <div className="charts">
-        <LineChart width={500} height={300} data={chartData}>
+        <LineChart width={1100} height={300} data={chartData}>
           <XAxis dataKey="time" />
           <YAxis />
           <CartesianGrid stroke="#eee" strokeWidth={2} strokeDasharray="5 5" />
@@ -77,14 +77,14 @@ const TestChart = () => {
           <Legend />
           <Line type="monotone" dataKey="value" stroke="#8884d8" />
         </LineChart>
-        <ScatterChart width={500} height={300} data={scatterData}>
+        <ScatterChart width={1000} height={300} data={scatterData}>
           <XAxis dataKey="x" />
           <YAxis />
           <CartesianGrid stroke="#eee" strokeWidth={2} strokeDasharray="5 5" />
           <Tooltip />
           <Scatter dataKey="y" fill="#82ca9d" />
         </ScatterChart>
-        <BarChart width={500} height={300} data={barData}>
+        <BarChart width={1000} height={300} data={barData}>
           <XAxis dataKey="time" />
           <YAxis />
           <CartesianGrid stroke="#eee" strokeWidth={2} strokeDasharray="5 5" />
