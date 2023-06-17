@@ -54,7 +54,7 @@ const SignIn = () => {
         Sign in
       </Button>
       <Row ><Link>Forgot password</Link></Row>
-      <Link>Sign up</Link>
+      
     </Form>
         
         
