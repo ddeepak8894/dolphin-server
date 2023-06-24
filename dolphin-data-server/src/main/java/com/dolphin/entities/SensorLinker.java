@@ -24,9 +24,4 @@ public class SensorLinker {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="user_id")
 	private User user;
-	
-	
-	
-	
-
 }
