@@ -1,8 +1,12 @@
 package com.dolphin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +37,20 @@ public class SensorController {
 		
 		
 		
-		return Response.error(sensorService.addSensor(data));
+		return Response.success(sensorService.addSensor(data));
+	}
+	
+	@GetMapping("/getSensorsOfUser/{id}")
+	public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id){
+		
+		List<SensorAddDto> sensorList=sensorService.getAllSensorsOfUser(id);
+		System.out.println(sensorList.toString());
+		if(sensorList==null) {
+			return Response.error("SENSOR_LIST_IS_EMPTY");
+		}else {
+			return Response.success(sensorList);
+		}
+		
 	}
 
 }

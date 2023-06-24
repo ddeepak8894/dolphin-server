@@ -2,6 +2,9 @@ package com.dolphin.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,8 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
-@Entity@Table(name="users")@Getter@Setter@NoArgsConstructor@ToString
+@Entity@Table(name="users")@Getter@Setter@NoArgsConstructor@ToString@JsonInclude(value = Include.NON_NULL)
 public class User {
 	
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)@Column(name="user_id")
@@ -39,6 +43,7 @@ public class User {
 	@Column(name="security_answer")
 	private String securityAnswer;
 	
+	@Exclude
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
 	private List<SensorLinker> sensorLinkerList;
 	

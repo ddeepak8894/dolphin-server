@@ -1,6 +1,8 @@
 package com.dolphin.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,13 +69,28 @@ public class SensorService {
 			sensorLinker.setUser(user.orElse(null));
 			sensorDataLinkerDao.save(sensorLinker);
 			
-			return "data added successfully";
+			return "SENSOR_ADDED_SUCCESS";
 		}else {
-			return "sensor  addition failed!!!";
+			return "SENSOR_ADDITION_FAILED";
 		}
 	
 		
 		
+	}
+	public List<SensorAddDto> getAllSensorsOfUser(int id){
+		System.out.println("inside getAllSensorsOfUser =======");
+		Optional<User> userOptional=userDao.findById(id);
+		User user = userOptional.orElse(null);
+		System.out.println("inside getAllSensorsOfUser ======= usernake"+user.toString());
+		List<SensorLinker> linkerList =user.getSensorLinkerList();
+        if (user != null) {
+        	System.out.println("befor for each in getAllSensorsOfUser");
+        	linkerList.forEach((e)->{System.out.println(e.toString());});
+          return SensorAddDto.getListFromSensorLinkerList(linkerList);
+        	
+        } 
+		
+		return null;
 	}
 
 }
