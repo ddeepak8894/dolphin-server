@@ -3,6 +3,7 @@ package com.dolphin.entities;
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,16 +19,17 @@ import lombok.ToString.Exclude;
 public class SensorData {
 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)@Id
+	@Column(name="id")
 	private int sensorDataId;
 	
 	@Exclude
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name="sensor_id")
+	@JoinColumn(name="name_of_sensor")
 	private Sensor sensor;
 	
 	private String data;
 	
-	 @Temporal(TemporalType.TIMESTAMP)
+	 @Temporal(TemporalType.TIMESTAMP)@Column(name="last_updated_at")
 	private Date lastUpdatedAt;
 	
 	

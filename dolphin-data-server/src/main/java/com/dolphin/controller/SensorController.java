@@ -19,38 +19,36 @@ import com.dolphin.entities.Sensor;
 import com.dolphin.services.SensorService;
 
 @CrossOrigin("*")
-@RestController @RequestMapping("/api/sensor/")
+@RestController
+@RequestMapping("/api/sensor/")
 public class SensorController {
-	
+
 	@Autowired
 	SensorService sensorService;
-	
+
 	@PostMapping("/addSensorData")
-	public ResponseEntity<?> addSensorData(@RequestBody SensorDataAddDto data){
-		
-		
+	public ResponseEntity<?> addSensorData(@RequestBody SensorDataAddDto data) {
+
 		return Response.error(sensorService.addSensorData(data));
 	}
-	
+
 	@PostMapping("/addSensor")
-	public ResponseEntity<?> addSensor(@RequestBody SensorAddDto data){
-		
-		
-		
+	public ResponseEntity<?> addSensor(@RequestBody SensorAddDto data) {
+
 		return Response.success(sensorService.addSensor(data));
 	}
-	
+
 	@GetMapping("/getSensorsOfUser/{id}")
-	public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id){
-		
-		List<SensorAddDto> sensorList=sensorService.getAllSensorsOfUser(id);
-		System.out.println(sensorList.toString());
-		if(sensorList==null) {
+	public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id) {
+
+		List<SensorAddDto> sensorList = sensorService.getAllSensorsOfUser(id);
+
+		if (sensorList == null) {
 			return Response.error("SENSOR_LIST_IS_EMPTY");
-		}else {
+		} else {
 			return Response.success(sensorList);
 		}
-		
+
 	}
 
 }

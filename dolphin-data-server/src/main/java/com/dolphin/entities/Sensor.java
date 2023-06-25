@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,13 +20,14 @@ import lombok.Setter;
 @Entity@Data@Table(name="sensor")
 public class Sensor {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)@Id@Column(name="sensor_id")
 	private int sensorId;
-	
+	@Column(name="name_of_sensor")
 	private String nameOfSensor;
-	
+	@Column(name="current_status")
 	private String currentStatus;
 	
+	@Column(name="last_updated_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdatedAt;
 	

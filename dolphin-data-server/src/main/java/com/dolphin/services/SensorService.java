@@ -34,16 +34,17 @@ public class SensorService {
 	
 	public String addSensorData(SensorDataAddDto data) {
 		
-		if(sensorDao.findById(data.getSensorId()).isPresent()&&userDao.findById(data.getUserId()).isPresent()) {
+		String userEmail = data.getNameOfSensor().split("-")[0];
+		Optional<User> user= userDao.findByEmail(userEmail);
+		Optional<Sensor>sensor=sensorDao.findByNameOfSensor(data.getNameOfSensor());
+		
+		if(user.isPresent() && sensor.isPresent() ) {
 			System.out.println("sensor present or not=== ");
-			Optional<Sensor> sensorOptional = sensorDao.findById(data.getSensorId());
-			System.out.println("---------sensorOptional-"+sensorOptional.orElse(null)+data.toString());
 			SensorData sensorData = new SensorData();
 			sensorData.setData(data.getData().toString());
-			sensorData.setSensor(sensorOptional.orElse(null));
+			sensorData.setSensor(sensor.get());
 			sensorData.setLastUpdatedAt(new Date());
 			sensorDataDao.save(sensorData);
-			
 			return "data added successfully";
 		}else {
 			return "failed !!!!";
@@ -57,13 +58,12 @@ public class SensorService {
 	public String addSensor(SensorAddDto sensorAddData) {
 		
 		if(userDao.findById(sensorAddData.getUserId()).isPresent()) {
+			Optional<User> user = userDao.findById(sensorAddData.getUserId());
 			Sensor sensor = new Sensor();
-			sensor.setNameOfSensor(sensorAddData.getNameOfSensor());
+			sensor.setNameOfSensor(user.get().getEmail()+"-"+sensorAddData.getNameOfSensor());
 			sensor.setCurrentStatus(sensorAddData.getCurrentStatus());
 			sensor.setLastUpdatedAt(new Date());
 			Sensor savedSensor = sensorDao.save(sensor);
-			Optional<User> user = userDao.findById(sensorAddData.getUserId());
-			
 			SensorLinker sensorLinker =new SensorLinker();
 			sensorLinker.setSensor(savedSensor);
 			sensorLinker.setUser(user.orElse(null));

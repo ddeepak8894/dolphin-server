@@ -8,5 +8,6 @@ public class SensorDataAddDto {
 	private int userId;
 	private int sensorId;
 	private String data;
+	private String nameOfSensor;
 
 }
