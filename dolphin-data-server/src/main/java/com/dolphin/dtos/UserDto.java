@@ -1,12 +1,6 @@
 package com.dolphin.dtos;
 
-
-
-
-
 import com.dolphin.entities.User;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

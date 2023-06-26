@@ -13,9 +13,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString.Exclude;
 
-@Data@Entity(name="sensor_data")
+@Entity(name="sensor_data")@Data@Getter@Setter
 public class SensorData {
 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)@Id
@@ -24,7 +26,7 @@ public class SensorData {
 	
 	@Exclude
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name="name_of_sensor")
+	@JoinColumn(name="sensor_id")
 	private Sensor sensor;
 	
 	private String data;

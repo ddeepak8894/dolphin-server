@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dolphin.dtos.Response;
 import com.dolphin.dtos.SensorAddDto;
 import com.dolphin.dtos.SensorDataAddDto;
+import com.dolphin.entities.DataTable;
 import com.dolphin.entities.Sensor;
+import com.dolphin.entities.SensorData;
 import com.dolphin.services.SensorService;
 
 @CrossOrigin("*")
@@ -49,6 +51,19 @@ public class SensorController {
 			return Response.success(sensorList);
 		}
 
+	}
+	
+	@PostMapping("/getSensorData")
+	public ResponseEntity<?> getSensorData(@RequestBody SensorAddDto data) {
+		System.out.println("to get data of sensor ====== "+data.getSensorId());
+		List<SensorDataAddDto> datas=sensorService.getDataOfSensorByID(data.getSensorId());
+		if(datas != null) {
+			System.out.println(datas.toString());
+			return  Response.success(datas);
+		}else {
+			return  Response.error("SENSOR_DOES_NOT_EXIST");
+		}
+		
 	}
 
 }

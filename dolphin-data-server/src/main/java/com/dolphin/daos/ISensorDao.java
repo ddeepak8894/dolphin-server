@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface ISensorDao extends JpaRepository<Sensor, Integer> {
 	
 	public Optional<Sensor> findByNameOfSensor(String nameOfSensor);
+	
 
 }
