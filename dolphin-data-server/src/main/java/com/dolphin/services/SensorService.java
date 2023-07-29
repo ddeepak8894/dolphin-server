@@ -158,6 +158,7 @@ public class SensorService {
 	
 		
 	}
+	
 
 	
 	public String deleteSensor(SensorAddDto data) {
@@ -178,6 +179,24 @@ public class SensorService {
 	    } else {
 	        log.warn("No such sensor exists with ID: {}", data.getSensorId());
 	        return "NO_SUCH_SENSOR_EXISTS";
+	    }
+	}
+
+	public SensorAddDto getSensorByID(Integer sensorId) {
+	    log.info("Fetching sensor with ID: {}", sensorId);
+
+	    Sensor sensor = sensorDao.findById(sensorId).orElse(null);
+	    if (sensor != null) {
+	        SensorAddDto sensorToSend = new SensorAddDto();
+	        sensorToSend.setNameOfSensor(sensor.getNameOfSensor());
+	        sensorToSend.setLatitudeLong(Double.parseDouble(sensor.getLatitude()));
+	        sensorToSend.setLongitudeLong(Double.parseDouble(sensor.getLongitude()));
+
+	        log.info("Sensor found and sent: {}", sensorToSend);
+	        return sensorToSend;
+	    } else {
+	        log.warn("No sensor found with ID: {}", sensorId);
+	        return null;
 	    }
 	}
 	

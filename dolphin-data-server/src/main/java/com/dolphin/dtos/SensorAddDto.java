@@ -17,6 +17,8 @@ public class SensorAddDto {
 	private String currentStatus;
 	private String longitude;
 	private String latitude;
+	private Double longitudeLong;
+	private Double latitudeLong;
 	
 	public static List<SensorAddDto> getListFromSensorLinkerList(List<SensorLinker> linkerList ) {
 		List<SensorAddDto> sensorList = new ArrayList();

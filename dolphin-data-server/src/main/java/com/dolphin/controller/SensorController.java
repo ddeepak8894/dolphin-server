@@ -84,5 +84,19 @@ public class SensorController {
 		}
 		
 	}
+	
+	@PostMapping("/getSensorPosition")
+	public ResponseEntity<?> getSensor(@RequestBody SensorAddDto data) {
+	    log.info("Received request to get sensor data with ID: {}", data.getSensorId());
+
+	    SensorAddDto datas = sensorService.getSensorByID(data.getSensorId());
+	    if (datas != null) {
+	        log.info("Sensor data retrieved successfully: {}", datas);
+	        return Response.success(datas);
+	    } else {
+	        log.warn("No sensor found with ID: {}", data.getSensorId());
+	        return Response.error("SENSOR_DOES_NOT_EXIST");
+	    }
+	}
 
 }
