@@ -65,6 +65,7 @@ public class SensorService {
 
 	
 	public String updatePositionParameterOfSensor(SensorAddDto sensorData) {
+	    if (sensorDao.findByNameOfSensor(sensorData.getNameOfSensor()).isPresent()) {
 	        try {
 	            int rowChanged = sensorDao.updatePositionParameterOfSensor(
 	                sensorData.getNameOfSensor(),
@@ -77,13 +78,17 @@ public class SensorService {
 	                return "UPDATE_SUCCESS";
 	            } else {
 	                log.warn("No rows were updated for sensor: {}", sensorData.getNameOfSensor());
-	                return "UPDATE_FAILED";
+	                return "UPDATE_FAILED_NO_ROWS_UPDATED";
 	            }
 	        } catch (Exception e) {
 	            log.error("Error occurred while updating sensor position: {}", e.getMessage());
 	            return "UPDATE_ERROR";
 	        }
+	    } else {
+	        log.warn("Sensor with name '{}' not found in the database.", sensorData.getNameOfSensor());
+	        return "SENSOR_NOT_FOUND";
 	    }
+	}
 
 	public String addSensor(SensorAddDto sensorAddData) {
 		log.info("adding sensor : "+sensorAddData.getNameOfSensor());
@@ -105,23 +110,30 @@ public class SensorService {
 		}
 
 	}
-	public List<SensorAddDto> getAllSensorsOfUser(int id) {
-		
-		Optional<User> userOptional = userDao.findById(id);
-		User user = userOptional.orElse(null);
-		System.out.println("inside getAllSensorsOfUser ======= usernake" + user.toString());
-		List<SensorLinker> linkerList = user.getSensorLinkerList();
-		if (user != null) {
-			System.out.println("befor for each in getAllSensorsOfUser");
-			linkerList.forEach((e) -> {
-				System.out.println(e.toString());
-			});
-			return SensorAddDto.getListFromSensorLinkerList(linkerList);
+	   public List<SensorAddDto> getAllSensorsOfUser(int id) {
+	        log.info("Received request to get all sensors of user with ID: {}", id);
 
-		}
+	        Optional<User> userOptional = userDao.findById(id);
+	        User user = userOptional.orElse(null);
 
-		return null;
-	}
+	        if (user != null) {
+	            log.info("User found: {}", user);
+	            List<SensorLinker> linkerList = user.getSensorLinkerList();
+	            log.info("Number of SensorLinker items for user with ID {}: {}", id, linkerList.size());
+
+	            linkerList.forEach((linker) -> {
+	                log.info("SensorLinker item: {}", linker);
+	            });
+
+	            List<SensorAddDto> sensorList = SensorAddDto.getListFromSensorLinkerList(linkerList);
+	            log.info("Returning {} sensor(s) for user with ID: {}", sensorList.size(), id);
+	            return sensorList;
+	        } else {
+	            log.warn("User not found for ID: {}", id);
+	            return null;
+	        }
+	    }
+	   
 	public List<SensorDataAddDto> getDataOfSensorByID(int id) {
 		if(sensorDao.findById(id).isPresent()) {
 			List<SensorData> list=sensorDataDao.findBySensor_SensorId(id);

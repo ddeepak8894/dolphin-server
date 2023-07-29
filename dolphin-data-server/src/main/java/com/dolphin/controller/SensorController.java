@@ -52,18 +52,20 @@ public class SensorController {
         return Response.success(result);
     }
 
-	@GetMapping("/getSensorsOfUser/{id}")
-	public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id) {
+    @GetMapping("/getSensorsOfUser/{id}")
+    public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id) {
+        log.info("Received request to get sensors of user with ID: {}", id);
 
-		List<SensorAddDto> sensorList = sensorService.getAllSensorsOfUser(id);
+        List<SensorAddDto> sensorList = sensorService.getAllSensorsOfUser(id);
 
-		if (sensorList == null) {
-			return Response.error("SENSOR_LIST_IS_EMPTY");
-		} else {
-			return Response.success(sensorList);
-		}
-
-	}
+        if (sensorList == null) {
+            log.warn("Sensor list is empty for user with ID: {}", id);
+            return Response.error("SENSOR_LIST_IS_EMPTY");
+        } else {
+            log.info("Returning sensor list for user with ID: {}", id);
+            return Response.success(sensorList);
+        }
+    }
 	
 	@PostMapping("/getSensorData")
 	public ResponseEntity<?> getSensorData(@RequestBody SensorAddDto data) {
