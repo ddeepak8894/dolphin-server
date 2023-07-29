@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import com.dolphin.DolphinDataServerApplication;
 import com.dolphin.daos.ISensorDao;
 import com.dolphin.daos.ISensorData;
 import com.dolphin.daos.ISensorLinkerDao;
@@ -17,9 +20,10 @@ import com.dolphin.entities.SensorLinker;
 import com.dolphin.entities.User;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
+@Transactional@Slf4j
 public class SensorService {
 	@Autowired
 	IUserDao userDao;
@@ -49,9 +53,40 @@ public class SensorService {
 		}
 	}
 	
+	@Scheduled(cron = "0 */10 * * * *")
+	public void deleteOldSensorData() {
+	    // Calculate the date 10 minutes ago
+	    Date tenMinutesAgo = new Date(System.currentTimeMillis() - (10 * 60 * 1000));
+
+	    // Delete sensorData entries older than tenMinutesAgo
+//	    sensorDataDao.deleteByLastUpdatedAtBefore(tenMinutesAgo);
+	}
+	
+
+	
+	public String updatePositionParameterOfSensor(SensorAddDto sensorData) {
+	        try {
+	            int rowChanged = sensorDao.updatePositionParameterOfSensor(
+	                sensorData.getNameOfSensor(),
+	                sensorData.getLatitude(),
+	                sensorData.getLongitude()
+	            );
+
+	            if (rowChanged > 0) {
+	                log.info("Sensor position updated successfully. Rows affected: {}", rowChanged);
+	                return "UPDATE_SUCCESS";
+	            } else {
+	                log.warn("No rows were updated for sensor: {}", sensorData.getNameOfSensor());
+	                return "UPDATE_FAILED";
+	            }
+	        } catch (Exception e) {
+	            log.error("Error occurred while updating sensor position: {}", e.getMessage());
+	            return "UPDATE_ERROR";
+	        }
+	    }
 
 	public String addSensor(SensorAddDto sensorAddData) {
-
+		log.info("adding sensor : "+sensorAddData.getNameOfSensor());
 		if (userDao.findById(sensorAddData.getUserId()).isPresent()) {
 			Optional<User> user = userDao.findById(sensorAddData.getUserId());
 			Sensor sensor = new Sensor();
@@ -70,9 +105,8 @@ public class SensorService {
 		}
 
 	}
-
 	public List<SensorAddDto> getAllSensorsOfUser(int id) {
-		System.out.println("inside getAllSensorsOfUser =======");
+		
 		Optional<User> userOptional = userDao.findById(id);
 		User user = userOptional.orElse(null);
 		System.out.println("inside getAllSensorsOfUser ======= usernake" + user.toString());
@@ -88,7 +122,6 @@ public class SensorService {
 
 		return null;
 	}
-	
 	public List<SensorDataAddDto> getDataOfSensorByID(int id) {
 		if(sensorDao.findById(id).isPresent()) {
 			List<SensorData> list=sensorDataDao.findBySensor_SensorId(id);

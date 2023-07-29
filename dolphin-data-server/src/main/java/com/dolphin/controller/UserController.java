@@ -13,19 +13,21 @@ import com.dolphin.dtos.UserDto;
 import com.dolphin.entities.User;
 import com.dolphin.services.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @CrossOrigin("*")
-@RestController @RequestMapping("/api/user/")
+@RestController @RequestMapping("/api/user/")@Slf4j
 public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@PostMapping("/addUser")
-	public ResponseEntity<?> addUser(@RequestBody User user) {
-		System.out.println(user.toString());
-		userService.addUser(user);
-		return Response.success("USER_ADDED_SUCCESSFULLY");
-		
-	}
+    @PostMapping("/addUser")
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        log.info("Received request to add user: {}", user);
+        String responseMessage = userService.addUser(user);
+        log.info("User addition response: {}", responseMessage);
+        return Response.success(responseMessage);
+    }
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> authenticateUser(@RequestBody User user) {
 		System.out.println(user.toString());

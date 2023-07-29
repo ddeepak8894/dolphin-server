@@ -2,6 +2,9 @@ package com.dolphin.entities;
 
 import java.util.Date;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString.Exclude;
 
-@Entity(name="sensor_data")@Data@Getter@Setter
+@Entity(name="sensor_data")@Data@Getter@Setter@DynamicInsert@DynamicUpdate
 public class SensorData {
 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)@Id

@@ -2,6 +2,9 @@ package com.dolphin.entities;
 
 import java.util.List;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -20,7 +23,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
 
-@Entity@Table(name="users")@Getter@Setter@NoArgsConstructor@ToString@JsonInclude(value = Include.NON_NULL)
+@Entity@Table(name="users")@Getter@Setter@NoArgsConstructor@ToString@JsonInclude(value = Include.NON_NULL)@DynamicInsert@DynamicUpdate
 public class User {
 	
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)@Column(name="user_id")
@@ -30,14 +33,18 @@ public class User {
 	private String firstName;
 	@Column(name="last_name")
 	private String lastName;
-	@Column(name="email")
-	private String email;
+    @Column(name = "email", unique = true) // Adding the unique constraint to the email field
+    private String email;
 	@Column(name="password")
 	private String password;
 	@Column(name="role")
 	private String role;
 	@Column(name="cell_no")
 	private String cellNo;
+	
+	@Column(name="name_of_society")
+	private String nameOfSociety;
+	
 	@Column(name="security_question")
 	private String securityQuestion;
 	@Column(name="security_answer")

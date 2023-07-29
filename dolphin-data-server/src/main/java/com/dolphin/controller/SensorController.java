@@ -20,9 +20,11 @@ import com.dolphin.entities.Sensor;
 import com.dolphin.entities.SensorData;
 import com.dolphin.services.SensorService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/sensor/")
+@RequestMapping("/api/sensor/")@Slf4j
 public class SensorController {
 
 	@Autowired
@@ -36,9 +38,19 @@ public class SensorController {
 
 	@PostMapping("/addSensor")
 	public ResponseEntity<?> addSensor(@RequestBody SensorAddDto data) {
-
+		
 		return Response.success(sensorService.addSensor(data));
 	}
+	
+    @PostMapping("/updateSensorPosition")
+    public ResponseEntity<?> updateSensorPosition(@RequestBody SensorAddDto data) {
+        log.info("Received request to update sensor position: {}", data);
+
+        String result = sensorService.updatePositionParameterOfSensor(data);
+
+        log.info("Update result for sensor {}: {}", data.getNameOfSensor(), result);
+        return Response.success(result);
+    }
 
 	@GetMapping("/getSensorsOfUser/{id}")
 	public ResponseEntity<?> getAllSensorsOfUser(@PathVariable int id) {

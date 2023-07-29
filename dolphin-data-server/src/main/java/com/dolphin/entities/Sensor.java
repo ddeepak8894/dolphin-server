@@ -24,8 +24,15 @@ public class Sensor {
 	private int sensorId;
 	@Column(name="name_of_sensor")
 	private String nameOfSensor;
+	
 	@Column(name="current_status")
 	private String currentStatus;
+	
+	@Column(name="longitude")
+	private String longitude;
+	
+	@Column(name="latitude")
+	private String latitude;
 	
 	@Column(name="last_updated_at")
 	@Temporal(TemporalType.TIMESTAMP)
