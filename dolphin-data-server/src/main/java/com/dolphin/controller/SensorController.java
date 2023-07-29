@@ -41,6 +41,11 @@ public class SensorController {
 		
 		return Response.success(sensorService.addSensor(data));
 	}
+	@PostMapping("/deleteSensor")
+	public ResponseEntity<?> deleteSensor(@RequestBody SensorAddDto data) {
+		
+		return Response.success(sensorService.deleteSensor(data));
+	}
 	
     @PostMapping("/updateSensorPosition")
     public ResponseEntity<?> updateSensorPosition(@RequestBody SensorAddDto data) {

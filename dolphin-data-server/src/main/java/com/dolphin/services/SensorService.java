@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.print.DocFlavor.STRING;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -64,6 +67,7 @@ public class SensorService {
 	
 
 	
+	
 	public String updatePositionParameterOfSensor(SensorAddDto sensorData) {
 	    if (sensorDao.findByNameOfSensor(sensorData.getNameOfSensor()).isPresent()) {
 	        try {
@@ -91,24 +95,34 @@ public class SensorService {
 	}
 
 	public String addSensor(SensorAddDto sensorAddData) {
-		log.info("adding sensor : "+sensorAddData.getNameOfSensor());
-		if (userDao.findById(sensorAddData.getUserId()).isPresent()) {
-			Optional<User> user = userDao.findById(sensorAddData.getUserId());
-			Sensor sensor = new Sensor();
-			sensor.setNameOfSensor(user.get().getEmail() + "-" + sensorAddData.getNameOfSensor());
-			sensor.setCurrentStatus(sensorAddData.getCurrentStatus());
-			sensor.setLastUpdatedAt(new Date());
-			Sensor savedSensor = sensorDao.save(sensor);
-			SensorLinker sensorLinker = new SensorLinker();
-			sensorLinker.setSensor(savedSensor);
-			sensorLinker.setUser(user.orElse(null));
-			sensorDataLinkerDao.save(sensorLinker);
+	    log.info("Adding sensor: {}", sensorAddData.getNameOfSensor());
 
-			return "SENSOR_ADDED_SUCCESS";
-		} else {
-			return "SENSOR_ADDITION_FAILED";
-		}
+	    User user = userDao.findById(sensorAddData.getUserId()).orElse(null);
+	    if (user != null) {
+	        String sensorName = user.getEmail() + "-" + sensorAddData.getNameOfSensor();
 
+	        if (sensorDao.findByNameOfSensor(sensorName).isEmpty()) {
+	            Sensor sensor = new Sensor();
+	            sensor.setNameOfSensor(sensorName);
+	            sensor.setCurrentStatus(sensorAddData.getCurrentStatus());
+	            sensor.setLastUpdatedAt(new Date());
+	            Sensor savedSensor = sensorDao.save(sensor);
+	            SensorLinker sensorLinker = new SensorLinker();
+	            sensorLinker.setSensor(savedSensor);
+	            sensorLinker.setUser(user);
+	            sensorDataLinkerDao.save(sensorLinker);
+
+	            log.info("Sensor added successfully: {}", savedSensor.getNameOfSensor());
+	            return "SENSOR_ADDED_SUCCESS";
+	        } else {
+	            log.warn("Sensor name already present: {}", sensorName);
+	            return "SENSOR_NAME_ALREADY_PRESENT";
+	        }
+
+	    } else {
+	        log.warn("No user attached to sensor: {}", sensorAddData.getNameOfSensor());
+	        return "NO_USER_ATTACHED_TO_SENSOR";
+	    }
 	}
 	   public List<SensorAddDto> getAllSensorsOfUser(int id) {
 	        log.info("Received request to get all sensors of user with ID: {}", id);
@@ -143,6 +157,28 @@ public class SensorService {
 		}
 	
 		
+	}
+
+	
+	public String deleteSensor(SensorAddDto data) {
+	    log.info("Deleting sensor with ID: {}", data.getSensorId());
+
+	    Sensor sensor = sensorDao.findById(data.getSensorId()).orElse(null);
+	    User user = userDao.findById(data.getUserId()).orElse(null);
+
+	    if (user == null) {
+	        log.warn("No user attached to sensor with ID: {}", data.getSensorId());
+	        return "NO_USER_ATTACHED";
+	    }
+
+	    if (sensor != null && data.getNameOfSensor().contains(user.getEmail())) {
+	        sensorDao.delete(sensor);
+	        log.info("Sensor deleted successfully: {}", sensor.getNameOfSensor());
+	        return "SENSOR_DELETED_SUCCESS";
+	    } else {
+	        log.warn("No such sensor exists with ID: {}", data.getSensorId());
+	        return "NO_SUCH_SENSOR_EXISTS";
+	    }
 	}
 	
 	
