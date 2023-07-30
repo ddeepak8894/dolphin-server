@@ -105,6 +105,8 @@ public class SensorService {
 	            Sensor sensor = new Sensor();
 	            sensor.setNameOfSensor(sensorName);
 	            sensor.setCurrentStatus(sensorAddData.getCurrentStatus());
+	            sensor.setLatitude("18.5381977");
+	            sensor.setLongitude("73.8301322");
 	            sensor.setLastUpdatedAt(new Date());
 	            Sensor savedSensor = sensorDao.save(sensor);
 	            SensorLinker sensorLinker = new SensorLinker();
@@ -162,7 +164,7 @@ public class SensorService {
 
 	
 	public String deleteSensor(SensorAddDto data) {
-	    log.info("Deleting sensor with ID: {}", data.getSensorId());
+	    log.info("Deleting sensor with ID: {} {}", data.getSensorId(),data.getNameOfSensor());
 
 	    Sensor sensor = sensorDao.findById(data.getSensorId()).orElse(null);
 	    User user = userDao.findById(data.getUserId()).orElse(null);
