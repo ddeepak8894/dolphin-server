@@ -32,6 +32,7 @@ public class UserDto {
 	private String securityAnswer;
 	private String fullName;
 	private Integer numberOfSensors;
+	private String nameOfSociety;
 	
     public static UserDto createDtoObject(User userToConvert) {
         log.debug("Converting User to UserDto: {}", userToConvert.getUserId());
@@ -48,7 +49,7 @@ public class UserDto {
             userToConvert.getSecurityQuestion(),
             userToConvert.getFirstName()+" "+
             userToConvert.getLastName(),
-            userToConvert.getSensorLinkerList().size()
+            userToConvert.getSensorLinkerList().size(),userToConvert.getNameOfSociety()
         );
 
         log.debug("User converted to UserDto: {}", user.getUserId());
