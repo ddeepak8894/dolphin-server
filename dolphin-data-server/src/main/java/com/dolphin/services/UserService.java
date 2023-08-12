@@ -1,5 +1,6 @@
 package com.dolphin.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UserService {
 		
 		 user=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
 		 if(user != null) {
-			 return new UserDto().createDtoObject(user);
+			 return UserDto.createDtoObject(user);
 		 }else {
 			 return null;
 		 }
@@ -56,6 +57,19 @@ public class UserService {
 	       return null;
 	    }
 	}
+
+    public List<UserDto> getAllUsers() {
+        log.debug("Fetching all users from the database...");
+
+        List<User> findAll = userDao.findAll();
+
+        log.info("Converting the fetched users to a list of UserDto objects...");
+        List<UserDto> userDtoList =  UserDto.createListOfAllUsers(findAll);
+
+        log.info("Returning the list of UserDto objects.");
+
+        return userDtoList;
+    }
 	
 	
 
