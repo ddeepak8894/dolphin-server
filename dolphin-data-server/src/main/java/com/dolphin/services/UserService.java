@@ -33,7 +33,24 @@ public class UserService {
             return "USER_ADD_FAIL_DUPLICATE_EMAIL";
         }
     }
-	
+    public String updateUser(User user) {
+        User existingUser = userDao.findById(user.getUserId()).orElse(null);
+
+        if (existingUser !=null) {
+        	existingUser.setFirstName(user.getFirstName());
+        	existingUser.setLastName(user.getLastName());
+        	existingUser.setCellNo(user.getCellNo());
+        	existingUser.setPassword(user.getPassword());
+        	existingUser.setNameOfSociety(user.getNameOfSociety());
+            userDao.save(user);
+            log.info("User updated successfully: {}", user.getEmail());
+            return "USER_UPDATE_SUCCESS";
+        } else {
+            log.error("Failed to update user: Duplicate email address: {}", user.getEmail());
+            return "USER_UPDATE_FAIL_INVALID_USER_ID";
+        }
+    }
+    
 	public UserDto findUserByCredentials(User user) {
 		
 		 user=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());

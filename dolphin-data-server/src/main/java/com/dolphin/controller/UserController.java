@@ -35,6 +35,14 @@ public class UserController {
         log.info("User addition response: {}", responseMessage);
         return Response.success(responseMessage);
     }
+    
+    @PostMapping("/updateUser")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        log.info("Received request to update user: {}", user);
+        String responseMessage = userService.updateUser(user);
+        log.info("User addition response: {}", responseMessage);
+        return Response.success(responseMessage);
+    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody User user) {
@@ -61,6 +69,7 @@ public class UserController {
         }
     }
 
+    
     @GetMapping("/getAllUsers")
     public ResponseEntity<?> getAllUsers() {
         System.out.println("**************************");
