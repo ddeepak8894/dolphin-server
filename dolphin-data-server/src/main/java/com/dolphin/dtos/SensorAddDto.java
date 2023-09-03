@@ -19,7 +19,7 @@ public class SensorAddDto {
 	private String latitude;
 	private Double longitudeLong;
 	private Double latitudeLong;
-	
+	private String type;
 	public static List<SensorAddDto> getListFromSensorLinkerList(List<SensorLinker> linkerList ) {
 		List<SensorAddDto> sensorList = new ArrayList();
 		
@@ -31,6 +31,7 @@ public class SensorAddDto {
 			sensor.setCurrentStatus(s.getSensor().getCurrentStatus());
 			sensor.setLatitude(s.getSensor().getLatitude());
 			sensor.setLongitude(s.getSensor().getLongitude());
+			sensor.setType(s.getSensor().getType());
 			System.out.println("inside list ======="+sensor.toString());
 			sensorList.add(sensor);
 			

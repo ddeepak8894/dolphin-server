@@ -74,7 +74,7 @@ public class SensorController {
 	
 	@PostMapping("/getSensorData")
 	public ResponseEntity<?> getSensorData(@RequestBody SensorAddDto data) {
-		System.out.println("to get data of sensor ====== "+data.getSensorId());
+		
 		List<SensorDataAddDto> datas=sensorService.getDataOfSensorByID(data.getSensorId());
 		if(datas != null) {
 			System.out.println(datas.toString());

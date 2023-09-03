@@ -38,18 +38,6 @@ public class DatabaseBackupService {
         if (exitCode == 0) {
             log.info("Database backup completed. Backup filename: {}", filename);
 
-            // Change the working directory to the specified location
-            String gitWorkingDirectory = "/Users/deepak.dhormare/Desktop/deepak_dhormare/dolphin-server/";
-            ProcessBuilder gitProcessBuilder = new ProcessBuilder("git", "add", filename);
-            gitProcessBuilder.directory(new File(gitWorkingDirectory));
-            Process gitAddProcess = gitProcessBuilder.start();
-            gitAddProcess.waitFor();
-
-            ProcessBuilder gitPushProcessBuilder = new ProcessBuilder("git", "push");
-            gitPushProcessBuilder.directory(new File(gitWorkingDirectory));
-            Process gitPushProcess = gitPushProcessBuilder.start();
-            gitPushProcess.waitFor();
-
             log.info("Backup file added to the Git repository and pushed successfully.");
         } else {
             log.error("Database backup failed.");

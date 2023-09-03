@@ -34,6 +34,9 @@ public class Sensor {
 	@Column(name="latitude")
 	private String latitude;
 	
+	@Column(name="type")
+	private String type;
+	
 	@Column(name="last_updated_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdatedAt;

@@ -108,6 +108,7 @@ public class SensorService {
 	            sensor.setLatitude("18.5381977");
 	            sensor.setLongitude("73.8301322");
 	            sensor.setLastUpdatedAt(new Date());
+	            sensor.setType(sensorAddData.getType());
 	            Sensor savedSensor = sensorDao.save(sensor);
 	            SensorLinker sensorLinker = new SensorLinker();
 	            sensorLinker.setSensor(savedSensor);
