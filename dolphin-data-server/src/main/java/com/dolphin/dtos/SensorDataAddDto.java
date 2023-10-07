@@ -16,6 +16,7 @@ public class SensorDataAddDto {
 	private int userId;
 	private int sensorId;
 	private String data;
+	private String maxValue;
 	private String nameOfSensor;
 	
 	private Date lastUpdatedAt;
