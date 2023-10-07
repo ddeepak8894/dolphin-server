@@ -1,9 +1,11 @@
-package mqtt_handlers;
+package config;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessageProducer;
@@ -22,7 +24,7 @@ import com.dolphin.dtos.SensorDataAddDto;
 import com.dolphin.services.SensorService;
 
 
-@Configuration
+@Configuration@IntegrationComponentScan
 public class MqttBeans {
 	@Autowired
 	SensorService sensorService;
@@ -50,7 +52,7 @@ public class MqttBeans {
 	@Bean
 	public MessageProducer inbound() {
 		MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
-				mqttClientFactory(), "#");
+				mqttClientFactory(), "sensor_data/#");
 
 		adapter.setCompletionTimeout(5000);
 		adapter.setConverter(new DefaultPahoMessageConverter());
@@ -58,24 +60,41 @@ public class MqttBeans {
 		adapter.setOutputChannel(mqttInputChannel());
 		return adapter;
 	}
-	
+	@Bean
+	public MessageProducer inbound2() {
+	    MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn2",
+	            mqttClientFactory(), "sensor_data/temp/#");
+
+	    adapter.setCompletionTimeout(5000);
+	    adapter.setConverter(new DefaultPahoMessageConverter());
+	    adapter.setQos(2);
+	    adapter.setOutputChannel(mqttInputChannel());
+	    return adapter;
+	}
 
 	
-	
-	@Bean
+    @Bean
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
+        MqttPahoMessageHandler messageHandler =
+                       new MqttPahoMessageHandler("testClient", mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setDefaultTopic("inTopic");
+        return messageHandler;
+    }
+
+    @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
-	
-	@Bean
-    @ServiceActivator(inputChannel = "mqttOutboundChannel")
-    public MessageHandler mqttOutbound() {
-        //clientId is generated using a random number
-        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("serverOut", mqttClientFactory());
-        messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic("#");
-        messageHandler.setDefaultRetained(false);
-        return messageHandler;
+
+    @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
+    public interface MyGateway {
+
+        void sendToMqtt(String data);
+
     }
+    
+    
 
 }

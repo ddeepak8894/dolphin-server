@@ -19,7 +19,7 @@ public class MqttSubscriber {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final List<SensorDataAddDto> batch = new ArrayList<>();
-    private static final int BATCH_SIZE = 100; // Define your batch size
+    private static final int BATCH_SIZE = 10; // Define your batch size
 
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public void handleMessage(Message<String> message) {
@@ -38,7 +38,7 @@ public class MqttSubscriber {
             }
         } catch (Exception e) {
             // Handle exceptions (e.g., log, report, or take corrective actions)
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         System.out.println("Received message from topic MqttSubscriber: " + topic);
