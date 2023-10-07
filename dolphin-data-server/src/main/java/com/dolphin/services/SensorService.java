@@ -55,6 +55,33 @@ public class SensorService {
 			return "failed !!!!";
 		}
 	}
+    // Batch insertion method
+    public void addSensorDataInBatch(List<SensorDataAddDto> sensorDataList) {
+        List<SensorData> entities = new ArrayList<>();
+
+        for (SensorDataAddDto dto : sensorDataList) {
+            String userEmail = dto.getNameOfSensor().split("-")[0];
+            Optional<User> user = userDao.findByEmail(userEmail);
+            Optional<Sensor> sensor = sensorDao.findByNameOfSensor(dto.getNameOfSensor());
+
+            if (user.isPresent() && sensor.isPresent()) {
+                System.out.println("Sensor present for user " + userEmail);
+                SensorData sensorData = new SensorData();
+                sensorData.setData(dto.getData().toString());
+                sensorData.setSensor(sensor.get());
+                sensorData.setLastUpdatedAt(new Date());
+                entities.add(sensorData);
+            } else {
+                System.out.println("Sensor not found for user " + userEmail);
+            }
+        }
+
+        // Save the list of entities in a batch
+        if (!entities.isEmpty()) {
+            sensorDataDao.saveAll(entities);
+            System.out.println("Batch insertion completed.");
+        }
+    }
 	
 	@Scheduled(cron = "0 */10 * * * *")
 	public void deleteOldSensorData() {

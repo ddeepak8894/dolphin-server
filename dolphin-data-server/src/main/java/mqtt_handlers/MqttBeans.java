@@ -1,4 +1,4 @@
-package mqtt;
+package mqtt_handlers;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,30 +59,14 @@ public class MqttBeans {
 		return adapter;
 	}
 	
-	
-	@Bean
-	@ServiceActivator(inputChannel = "mqttInputChannel")
-	public MessageHandler handler() {
-		return new MessageHandler() {
 
-			@Override
-			public void handleMessage(Message<?> message) throws MessagingException {
-				String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
-				SensorDataAddDto data = new SensorDataAddDto();
-				if(topic.equals("myTopic")) {
-					System.out.println("This is the topic");
-				}
-				System.out.println(message.getPayload());
-			}
-
-		};
-	}
 	
 	
 	@Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
+	
 	@Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
