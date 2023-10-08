@@ -18,7 +18,7 @@ public class SensorDataAddDto {
 	private String data;
 	private String maxValue;
 	private String nameOfSensor;
-	
+	private String currentStatus;
 	private Date lastUpdatedAt;
 	
 	public static List<SensorDataAddDto> createDataList(List<SensorData> data) {
