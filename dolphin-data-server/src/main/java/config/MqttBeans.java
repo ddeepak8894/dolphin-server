@@ -19,6 +19,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.Header;
 
 import com.dolphin.dtos.SensorDataAddDto;
 import com.dolphin.services.SensorService;
@@ -73,15 +74,16 @@ public class MqttBeans {
 	}
 
 	
-    @Bean
-    @ServiceActivator(inputChannel = "mqttOutboundChannel")
-    public MessageHandler mqttOutbound() {
-        MqttPahoMessageHandler messageHandler =
-                       new MqttPahoMessageHandler("testClient", mqttClientFactory());
-        messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic("inTopic");
-        return messageHandler;
-    }
+	  @Bean
+	  @ServiceActivator(inputChannel = "mqttOutboundChannel")
+	  public MessageHandler mqttOutbound() {
+	    MqttPahoMessageHandler messageHandler =  new MqttPahoMessageHandler("22hg", mqttClientFactory());
+	    messageHandler.setAsync(true);
+	    messageHandler.setDefaultTopic("xyzz");
+	    messageHandler.setDefaultRetained(true);
+	   
+	    return messageHandler;
+	  }
 
     @Bean
     public MessageChannel mqttOutboundChannel() {
@@ -90,8 +92,12 @@ public class MqttBeans {
 
     @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
     public interface MyGateway {
+    	  void sendToMqtt(String data);
 
-        void sendToMqtt(String data);
+    	  void sendToMqtt(@Header(MqttHeaders.TOPIC) String topic,String data );
+
+    	
+    	
 
     }
     

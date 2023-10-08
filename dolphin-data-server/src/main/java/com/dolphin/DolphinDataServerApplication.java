@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-@IntegrationComponentScan
+
 @SpringBootApplication@Slf4j@ComponentScan(basePackages = { "mqtt_handlers","config","com.dolphin"})@EnableScheduling
 public class DolphinDataServerApplication {
 
