@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dolphin.entities.SensorLinker;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
 
-@Data
+@Data @JsonIgnoreProperties
 public class SensorAddDto {
 	
 	private Integer sensorId;

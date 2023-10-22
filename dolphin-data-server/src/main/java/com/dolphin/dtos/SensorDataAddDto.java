@@ -7,10 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.dolphin.entities.SensorData;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
-@Data
+@Data@JsonIgnoreProperties(ignoreUnknown = true)
 public class SensorDataAddDto {
 	
 	private int userId;
