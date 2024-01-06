@@ -33,16 +33,16 @@ public class MqttSubscriber {
             batch.add(data);
 
             if (batch.size() >= BATCH_SIZE) {
-                // Process and insert the batch
-                processAndInsertBatch();
+                // Process and insert the batch batch proceesing stoped pls uncoment below to start using it
+//                processAndInsertBatch();
             }
         } catch (Exception e) {
             // Handle exceptions (e.g., log, report, or take corrective actions)
             System.out.println(e.getMessage());
         }
 
-        System.out.println("Received message from topic MqttSubscriber: " + topic);
-        System.out.println("Payload: " + payload);
+//        System.out.println("Received message from topic MqttSubscriber: " + topic);
+//        System.out.println("Payload: " + payload);
     }
 
     private void processAndInsertBatch() {
